@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Personnel.Tracker.Model.Auth;
 using System;
 using System.Linq;
 using System.Threading;
@@ -24,6 +25,7 @@ namespace Personnel.Tracker.WebApi.Contexts
 
 
         // Db Sets
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Model.Personnel.Personnel> Personnels { get; set; }
         public DbSet<Model.Personnel.PersonnelCheck> PersonnelChecks { get; set; }
 

@@ -5,7 +5,7 @@ namespace Personnel.Tracker.WebApi.Controllers
 {
     [ApiController]
     [Route("personnels")]
-    public class PersonnelController : ControllerBase
+    public class PersonnelController : BaseController
     {         
         private readonly ILogger<PersonnelController> _logger; 
         public PersonnelController(ILogger<PersonnelController> logger)
@@ -16,7 +16,26 @@ namespace Personnel.Tracker.WebApi.Controllers
         [HttpGet]
         public string Get()
         {
-            return "pong";
+            return "Get Personnels ";
         }
+
+        [HttpPost]
+        public string Add()
+        {
+            return "Added";
+        }
+
+        [HttpPut]
+        public string Update()
+        {
+            return "Updated";
+        }
+       
+        [HttpDelete]
+        public string Delete()
+        {
+            return "Deleted";
+        }
+
     }
 }

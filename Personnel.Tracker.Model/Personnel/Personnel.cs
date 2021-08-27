@@ -14,5 +14,7 @@ namespace Personnel.Tracker.Model.Personnel
         public string PasswordHash { get; set; }
         public DateTime? LastLoginTime { get; set; }
         public PersonnelRole PersonnelRole { get; set; }
+
+        public List<PersonnelCheck> PersonnelChecks { get; set; }
     }
 }

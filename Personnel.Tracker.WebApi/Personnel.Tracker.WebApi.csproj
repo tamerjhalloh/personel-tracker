@@ -4,6 +4,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20210827192853_Init.cs" />
+    <Compile Remove="Migrations\20210827192853_Init.Designer.cs" />
+  </ItemGroup>
+
 
 
   <ItemGroup>

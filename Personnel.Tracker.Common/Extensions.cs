@@ -1,4 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Personnel.Tracker.Model.Action;
 using Personnel.Tracker.Model.Base;
 using System;
@@ -185,5 +191,35 @@ namespace Personnel.Tracker.Common
 
             return model;
         }
+
+
+        public static IMvcCoreBuilder AddCustomMvc(this IServiceCollection services)
+        {
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+                var configuration = serviceProvider.GetService<IConfiguration>();
+                services.Configure<MapOptions>(configuration.GetSection("app"));
+            }
+             
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            return services
+                .AddMvcCore()
+                .AddNewtonsoftJson(o =>
+                {
+                    o.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                    o.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                    o.SerializerSettings.DateParseHandling = DateParseHandling.DateTimeOffset;
+                    o.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+                    o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    o.SerializerSettings.Formatting = Formatting.Indented;
+                    o.SerializerSettings.Converters.Add(new StringEnumConverter());
+                })
+                .AddDataAnnotations()
+                .AddApiExplorer() 
+                .AddAuthorization();
+
+        }
+
     }
 }

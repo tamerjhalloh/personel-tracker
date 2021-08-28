@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Personnel.Tracker.Common;
+using Personnel.Tracker.Common.RestEase;
+using Personnel.Tracker.Portal.Services;
 
 namespace Personnel.Tracker.Portal
 {
@@ -18,7 +21,26 @@ namespace Personnel.Tracker.Portal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            var builder = services.AddControllersWithViews(); 
+
+            #if DEBUG
+            builder.AddRazorRuntimeCompilation();
+            #endif
+
+            builder.AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null); 
+
+            services.AddCustomMvc();
+            services.AddDistributedMemoryCache();
+
+            services.AddAuthentication("CookieAuth")
+                 .AddCookie("CookieAuth", config =>
+                 {
+                     config.Cookie.Name = "_Personnel_";
+                     config.LoginPath = "/member/login";
+
+                 });
+
+            services.RegisterServiceForwarder<IIdentityService>("rest-api");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

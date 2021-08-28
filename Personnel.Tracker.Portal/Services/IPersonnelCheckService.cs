@@ -13,6 +13,6 @@ namespace Personnel.Tracker.Portal.Services
 
         [AllowAnyStatusCode]
         [Post("personnel-checks/add")]
-        Task<OperationResult<PersonnelCheck>> SetPersonnelCheck(Query<PersonnelCheck> query);
+        Task<OperationResult<PersonnelCheck>> SetPersonnelCheck([Body] Query<PersonnelCheck> query);
     }
 }

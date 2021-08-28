@@ -56,6 +56,8 @@ namespace Personnel.Tracker.WebApi
             services.AddTransient<IIdentityService, IdentityService>();
 
             services.AddTransient<IPersonnelService, PersonnelService>();
+            services.AddTransient<IPersonnelCheckService, PersonnelCheckService>();
+
 
 
             // Enables Cors

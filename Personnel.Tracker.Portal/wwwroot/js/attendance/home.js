@@ -4,6 +4,24 @@
 // Write your JavaScript code.
 
 var Home = function () {
+
+    var setPersonnelCheckView = lastCheck => {
+        var template = "";
+        if (lastCheck == null || lastCheck.PersonnelCheckType == 'Out') {
+            if (lastCheck == null)
+                lastCheck = {};
+            template = "#tmp-personnel-checked-out";
+        }
+        else {
+            template = "#tmp-personnel-checked-in";
+        }
+
+        $('#check-status-holder').replaceWith(General.renderTemplate(template, lastCheck));
+
+        General.initInputs();
+        Home.init(); 
+    }
+
     return {       
         initOnce: function () { 
 
@@ -12,21 +30,8 @@ var Home = function () {
             General.ajax({
                 url: "/api/last", 
                 panel: panel, 
-                success: function (data) {
-                    //console.log(data);
-                    var template = "";
-                    if (data.Response == null || data.Response.PersonnelCheckType == 'Out') {
-                        if (data.Response == null)
-                            data.Response = {};
-                        template = "#tmp-personnel-checked-out";
-                    }
-                    else {
-                        template = "#tmp-personnel-checked-in";
-                    }
-
-                    $('#check-status-holder').replaceWith(General.renderTemplate(template, data.Response));
-
-                    Home.init(); 
+                success: function (data) { 
+                    setPersonnelCheckView(data.Response); 
                 } 
             });
         },
@@ -34,6 +39,7 @@ var Home = function () {
 
             $(".check-button").off("click").click(function () {
 
+                var cntrl = $(this);
                 var panel = $('#check-status-holder'); 
                 var type = $(this).attr('data-status'); 
 
@@ -41,9 +47,9 @@ var Home = function () {
                     url: "/api/set-personnel-check",
                     data: { PersonnelCheckType: type},
                     panel: panel,
-                    sender: $("#do-login"),
-                    success: function (data) {
-                         
+                    sender: cntrl,
+                    success: function (data) { 
+                        setPersonnelCheckView(data.Response); 
                     } 
                 });
 

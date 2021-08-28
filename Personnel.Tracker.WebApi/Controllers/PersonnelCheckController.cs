@@ -28,7 +28,7 @@ namespace Personnel.Tracker.WebApi.Controllers
             return "Get Personnels ";
         }
 
-        [HttpGet("last")]
+        [HttpPost("last")]
         public async Task<IActionResult> GetLastCheck()
         {
             return Ok(await _personnelCheckService.GetLastPersonnelCheck(new Model.Action.Query<Model.Personnel.Personnel>(new Model.Personnel.Personnel

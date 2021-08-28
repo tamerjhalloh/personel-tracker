@@ -234,9 +234,48 @@ var General = function () {
             return html;
 
         },
+        formatDateTime: function (orginaldate) { 
+
+            if (orginaldate == undefined || orginaldate == null || orginaldate == '') {
+                return "";
+            }
+
+            var date = new Date(orginaldate);
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+
+            if (year < 1990)
+                return "";
+
+            var h = date.getHours();
+            var m = date.getMinutes();
+            if (day < 10) {
+                day = "0" + day;
+            }
+            if (month < 10) {
+                month = "0" + month;
+            }
+
+            if (h < 10) {
+                h = "0" + h;
+            }
+
+            if (m < 10) {
+                m = "0" + m;
+            }
+
+            var date = day + "/" + month + "/" + year + " " + h + ":" + m;
+            return date;
+        },
+        initInputs: function () {
+            $.each($(".date-text"), function (i, input) {  
+                $(input).text(General.formatDateTime($(input).attr('data-value')));
+            });
+        }
     }
 }();
 
 $(document).ready(function () {
-
+    General.initInputs();
 });

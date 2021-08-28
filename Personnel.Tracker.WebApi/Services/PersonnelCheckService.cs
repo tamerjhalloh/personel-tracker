@@ -90,7 +90,7 @@ namespace Personnel.Tracker.WebApi.Services
 
                 var lastCheck = await GetLastPersonnelCheck(new Query<Model.Personnel.Personnel>(new Model.Personnel.Personnel { PersonnelId = query.Parameter.PersonnelId }));
 
-                if(!lastCheck.Result)
+                if(lastCheck.Result)
                 {
 
                     if(lastCheck.Response != null)
@@ -106,7 +106,7 @@ namespace Personnel.Tracker.WebApi.Services
                     }
                     else
                     {
-                        if(lastCheck.Response.PersonnelCheckType == Model.Base.PersonnelCheckType.In)
+                        if(query.Parameter.PersonnelCheckType == Model.Base.PersonnelCheckType.In)
                         {
                             result = await _personnelCheckRepository.AddAsync(query.Parameter);
                         }

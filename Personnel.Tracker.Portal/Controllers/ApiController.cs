@@ -111,7 +111,7 @@ namespace Personnel.Tracker.Portal.Controllers
 
             try
             {
-                var lastResult = await _personnelCheckService.SetPersonnelCheck(check);
+                var lastResult = await _personnelCheckService.SetPersonnelCheck(new Query<PersonnelCheck>(check));
 
                 result.Response = lastResult.Response;
                 result.Result = true;
@@ -120,7 +120,7 @@ namespace Personnel.Tracker.Portal.Controllers
             }
             catch (System.Exception ex)
             {
-                _logger.LogError(ex, "Exception while get last check");
+                _logger.LogError(ex, "Exception while set check");
             }
 
             return Ok(result);

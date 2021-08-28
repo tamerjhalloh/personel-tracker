@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Personnel.Tracker.Common;
 using Personnel.Tracker.Common.Authentication;
+using Personnel.Tracker.Model.Action;
+using Personnel.Tracker.Model.Personnel;
 using Personnel.Tracker.WebApi.Services;
 using System.Threading.Tasks;
 
@@ -34,10 +37,14 @@ namespace Personnel.Tracker.WebApi.Controllers
             })));
         }
 
-        [HttpPost]
-        public string Add()
+        
+        [HttpPost("add")]
+        public async Task<IActionResult> AddAsync(Query<PersonnelCheck> query)
         {
-            return "Added";
+            if(query.Parameter != null)
+                query.Parameter.Bind(x => x.PersonnelId, UserId);
+
+            return Ok(await _personnelCheckService.AddAsync(query));
         }
 
         //[HttpPut]

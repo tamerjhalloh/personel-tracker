@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Personnel.Tracker.Model.Action;
 using Personnel.Tracker.Model.Auth;
+using Personnel.Tracker.Model.Personnel;
 using Personnel.Tracker.Portal.Helpers;
 using Personnel.Tracker.Portal.Models;
 using Personnel.Tracker.Portal.Services;
@@ -14,11 +15,14 @@ namespace Personnel.Tracker.Portal.Controllers
         private readonly ILogger<ApiController> _logger;
 
         private readonly IIdentityService _identityService;
+        private readonly IPersonnelCheckService _personnelCheckService;
 
-        public ApiController(ILogger<ApiController> logger, IIdentityService identityService)
+
+        public ApiController(ILogger<ApiController> logger, IIdentityService identityService, IPersonnelCheckService personnelCheckService)
         {
             _logger = logger;
             _identityService = identityService;
+            _personnelCheckService = personnelCheckService;
         }
 
 
@@ -74,5 +78,57 @@ namespace Personnel.Tracker.Portal.Controllers
             return Ok(result);
 
         }
+
+
+
+        [HttpPost("api/last")]
+        public async Task<IActionResult> Last()
+        {
+            var result = new OperationResult<object>();
+
+            try
+            {
+                var lastResult = await _personnelCheckService.GetLastCheck();
+
+                result.Response = lastResult.Response;
+                result.Result = true; 
+                return Ok(result);
+
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while get last check");
+            }
+
+            return Ok(result);
+
+        }
+
+        [HttpPost("api/set-personnel-check")]
+        public async Task<IActionResult> SetPersonnelCheck(PersonnelCheck check)
+        {
+            var result = new OperationResult<object>();
+
+            try
+            {
+                var lastResult = await _personnelCheckService.SetPersonnelCheck(check);
+
+                result.Response = lastResult.Response;
+                result.Result = true;
+                return Ok(result);
+
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while get last check");
+            }
+
+            return Ok(result);
+
+        }
+
+
+
+        
     }
 }

@@ -221,5 +221,175 @@ namespace Personnel.Tracker.Common
 
         }
 
+
+
+        public static bool EqualsInsensitive(this string value, string target)
+        {
+            return value != null && value.Equals(target, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Checks if string is not null, not empty and has not only spaces 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsNotEmpty(this string value)
+        {
+            return !string.IsNullOrEmpty(value) && value.Trim() != string.Empty;
+        }
+
+
+        /// <summary>
+        /// Checks if string is null, empty or has only spaces 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsEmpty(this string value)
+        {
+            return string.IsNullOrEmpty(value) || value.Trim() == string.Empty;
+        }
+
+
+        public static void PrepareExceptionResult(this OperationResult result, Exception ex, string errorMessage = "")
+        {
+            result.Result = false;
+            result.SysErrorMessage = ex.Message;
+            result.ErrorCategory = ErrorCategory.Exception;
+            result.ErrorCode = ErrorCode.Exception;
+            result.ErrorMessage = errorMessage.IsEmpty() ? result.ErrorMessage : errorMessage;
+
+        }
+        public static void PrepareExceptionResult<T>(this OperationResult<T> result, Exception ex, string errorMessage = "")
+        {
+            result.Result = false;
+            result.SysErrorMessage = ex.Message;
+            result.ErrorCategory = ErrorCategory.Exception;
+            result.ErrorCode = ErrorCode.Exception;
+            result.ErrorMessage = errorMessage.IsEmpty() ? result.ErrorMessage : errorMessage;
+
+        }
+        public static void PrepareExceptionResult<T>(this PaggedOperationResult<T> result, Exception ex, string errorMessage = "")
+        {
+            result.Result = false;
+            result.SysErrorMessage = ex.Message;
+            result.ErrorCategory = ErrorCategory.Exception;
+            result.ErrorCode = ErrorCode.Exception;
+            result.ErrorMessage = errorMessage.IsEmpty() ? result.ErrorMessage : errorMessage;
+
+        }
+
+        public static void PrepareMissingParameterResult(this OperationResult result, string missingParameter)
+        {
+            result.ErrorMessage = missingParameter;
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.MissingParameter;
+            result.Result = false;
+
+        }
+        public static void PrepareMissingParameterResult<T>(this OperationResult<T> result, string missingParameter)
+        {
+            result.ErrorMessage = missingParameter;
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.MissingParameter;
+            result.Result = false;
+
+        }
+
+        public static void PrepareMissingParameterResult<T>(this PaggedOperationResult<T> result, string missingParameter)
+        {
+            result.ErrorMessage = missingParameter;
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.MissingParameter;
+            result.Result = false;
+
+        }
+
+        public static void PrepareNotFoundResult(this OperationResult result, string errorMessage = "")
+        {
+            result.ErrorMessage = errorMessage.IsEmpty() ? result.ErrorMessage : errorMessage;
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.NotFound;
+            result.Result = false;
+
+        }
+
+        public static void PrepareNotFoundResult<T>(this OperationResult<T> result, string errorMessage = "")
+        {
+            result.ErrorMessage = errorMessage.IsEmpty() ? result.ErrorMessage : errorMessage;
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.NotFound;
+            result.Result = false;
+
+        }
+        public static void PrepareNotFoundResult<T>(this PaggedOperationResult<T> result, string errorMessage = "")
+        {
+            result.ErrorMessage = errorMessage.IsEmpty() ? result.ErrorMessage : errorMessage;
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.NotFound;
+            result.Result = false;
+
+        }
+
+        public static void PrepareInvalidParameterResult<T>(this OperationResult<T> result, string parameter, string errorMessage)
+        {
+            result.ErrorMessage = $"{parameter} - {errorMessage}";
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.Validation;
+            result.Result = false;
+
+        }
+
+        public static void PrepareInvalidParameterResult<T>(this PaggedOperationResult<T> result, string parameter, string errorMessage)
+        {
+            result.ErrorMessage = $"{parameter} - {errorMessage}";
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.Validation;
+            result.Result = false;
+
+        }
+
+
+        public static void PrepareExistedPropertyResult<T>(this OperationResult<T> result, string errorMessage = "")
+        {
+            result.ErrorMessage = errorMessage.IsEmpty() ? result.ErrorMessage : errorMessage;
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.ExistsBefore;
+            result.Result = false;
+
+        }
+        public static void PrepareExistedPropertyResult<T>(this PaggedOperationResult<T> result, string errorMessage = "")
+        {
+            result.ErrorMessage = errorMessage.IsEmpty() ? result.ErrorMessage : errorMessage;
+            result.ErrorCategory = ErrorCategory.Validation;
+            result.ErrorCode = ErrorCode.ExistsBefore;
+            result.Result = false;
+
+        }
+
+
+        public static PaggedOperationResult<T> Clone<T, S>(this PaggedOperationResult<T> result, PaggedOperationResult<S> source)
+        {
+            result.ErrorMessage = source.ErrorMessage;
+            result.ErrorCategory = source.ErrorCategory;
+            result.ErrorCode = source.ErrorCode;
+            result.Result = source.Result;
+            result.TotalCount = source.TotalCount;
+            result.PageIndex = source.PageIndex;
+            result.PageSize = source.PageSize;
+            return result;
+        }
+        public static PaggedOperationResult<T> Clone<T>(this PaggedOperationResult<T> result, PaggedOperationResult<T> source)
+        {
+            result.ErrorMessage = source.ErrorMessage;
+            result.ErrorCategory = source.ErrorCategory;
+            result.ErrorCode = source.ErrorCode;
+            result.Result = source.Result;
+            result.TotalCount = source.TotalCount;
+            result.PageIndex = source.PageIndex;
+            result.PageSize = source.PageSize;
+            result.Response = source.Response;
+            return result;
+        }
+
     }
 }

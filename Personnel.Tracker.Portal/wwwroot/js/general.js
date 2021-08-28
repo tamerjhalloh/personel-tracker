@@ -5,7 +5,7 @@
 
 var General = function () {
 
-   // var baseUrl = "https://localhost:44346"
+    // var baseUrl = "https://localhost:44346"
 
     var requestType = {
         Get: "Get",
@@ -35,7 +35,7 @@ var General = function () {
                 {
                     dataType: requestDataType.Json,
                     type: requestType.Post,
-                   // contentType: "application/json",
+                    // contentType: "application/json",
                     timeout: 3 * 60 * 1000,
                     async: true,
                     activateSender: true
@@ -50,17 +50,17 @@ var General = function () {
                 General.block(options.panel);
             }
 
-             
-            $.ajax({ 
-              // url: baseUrl + options.url,
-                url: options.url, 
+
+            $.ajax({
+                // url: baseUrl + options.url,
+                url: options.url,
                 data: General.jsFriendlyJSONStringify(options.data),
                 type: options.type,
                 dataType: options.dataType,
                 processData: options.processData,
                 contentType: options.contentType,
                 timeout: options.timeout,
-                async: options.async, 
+                async: options.async,
                 success: function (data) {
                     if (data.Result) {
 
@@ -220,7 +220,20 @@ var General = function () {
         },
         notifyFailure: function (message) {
             General.notify(message == undefined || message.trim() == '' ? "Operation failed" : message, state.danger, 3);
-        }
+        },
+        renderTemplate: function (template, data, param = {}) {
+            var html = "";
+            if ($(template).length) {
+                var tmp = $(template)
+                if (data)
+
+                    html = tmp.render(data, param);
+                else
+                    html = tmp.render({}, param);
+            }
+            return html;
+
+        },
     }
 }();
 

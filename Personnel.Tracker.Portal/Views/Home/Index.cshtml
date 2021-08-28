@@ -2,14 +2,37 @@
     ViewBag.PageTitle = "Home page";
 }
 
-    <div class="ui vertical masthead center aligned segment">
-        <div class="ui text container">
-            <h1 class="ui header">
-                You have checked out!
-            </h1>
-           
-            <div class="ui huge green button"><i class="right arrow icon"></i> Check In </div>
+<div class="ui vertical masthead center aligned segment">
+    <div class="ui text container" id="check-status-holder">
+        <div class="ui inverted dimmer">
+            <div class="ui text loader">Loading</div>
         </div>
-
+        <p></p>
+        <p></p>
     </div>
 
+</div>
+
+@section Scripts {
+    <script src="~/js/attendance/home.js" asp-append-version="true"></script>
+
+    <script id="tmp-personnel-checked-out" type="text/x-jsrender">
+        <div class="ui text container" id="check-status-holder">
+            <h1 class="ui header" id="check-status">
+                You have checked out!
+            </h1>
+
+            <div class="ui huge green button check-button" data-status="in"><i class="right arrow icon"></i> Check In </div>
+        </div>
+    </script>
+    <script id="tmp-personnel-checked-in" type="text/x-jsrender">
+        <div class="ui text container" id="check-status-holder">
+            <h1 class="ui header" id="check-status">
+                You have checked in! 
+            </h1>
+
+            <div class="ui huge red button check-button" data-status="out"><i class="right arrow icon"></i> Check Out </div>
+        </div>
+    </script>
+
+}

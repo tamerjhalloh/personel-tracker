@@ -41,6 +41,9 @@ namespace Personnel.Tracker.Portal
                  });
 
             services.RegisterServiceForwarder<IIdentityService>("rest-api");
+            services.RegisterServiceForwarder<IPersonnelService>("rest-api");
+            services.RegisterServiceForwarder<IPersonnelCheckService>("rest-api");
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,18 +5,23 @@ using Personnel.Tracker.Portal.Models;
 
 namespace Personnel.Tracker.Portal.Controllers
 {
-    public class MemberController : Controller
+    public class HomeController : Controller
     {
-        private readonly ILogger<MemberController> _logger;
+        private readonly ILogger<HomeController> _logger;
 
-        public MemberController(ILogger<MemberController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Login()
+        public IActionResult Index()
         {
             return View();
-        } 
+        }
+
+        public IActionResult Attendance()
+        {
+            return View();
+        }
     }
 }

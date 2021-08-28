@@ -5,6 +5,7 @@ using Personnel.Tracker.Common.Authentication;
 using Personnel.Tracker.Model.Action;
 using Personnel.Tracker.Model.Personnel;
 using Personnel.Tracker.WebApi.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Personnel.Tracker.WebApi.Controllers
@@ -37,13 +38,36 @@ namespace Personnel.Tracker.WebApi.Controllers
             })));
         }
 
-        
+
         [HttpPost("add")]
         public async Task<IActionResult> AddAsync(Query<PersonnelCheck> query)
         {
-            if(query.Parameter != null)
+            if (query.Parameter != null)
                 query.Parameter.Bind(x => x.PersonnelId, UserId);
 
+            return Ok(await _personnelCheckService.AddAsync(query));
+        }
+
+        [HttpPost("my-attendances")]
+        public async Task<IActionResult> GetMyAttendancesAsync(Query<PersonnelCheck> query)
+        {
+            if (query.Parameter != null)
+                query.Parameter.Bind(x => x.PersonnelId, UserId);
+
+            if (query.Parameter.PersonnelId == Guid.Empty)
+            {
+                var result = new OperationResult();
+                result.PrepareMissingParameterResult("PersonnelId");
+                return Ok(result);
+            }
+
+
+            return Ok(await _personnelCheckService.GetPersonnelDayAttencance(query));
+        }
+
+        [HttpPost("attendances")]
+        public async Task<IActionResult> GetAttendancesAsync(Query<PersonnelCheck> query)
+        {
             return Ok(await _personnelCheckService.AddAsync(query));
         }
 

@@ -234,7 +234,7 @@ var General = function () {
             return html;
 
         },
-        formatDateTime: function (orginaldate) { 
+        formatDateTime: function (orginaldate, dateOnly) { 
 
             if (orginaldate == undefined || orginaldate == null || orginaldate == '') {
                 return "";
@@ -265,12 +265,12 @@ var General = function () {
                 m = "0" + m;
             }
 
-            var date = day + "/" + month + "/" + year + " " + h + ":" + m;
+            var date = dateOnly && dateOnly == true ? day + "/" + month + "/" + year :  day + "/" + month + "/" + year + " " + h + ":" + m;
             return date;
         },
         initInputs: function () {
             $.each($(".date-text"), function (i, input) {  
-                $(input).text(General.formatDateTime($(input).attr('data-value')));
+                $(input).text(General.formatDateTime($(input).attr('data-value'), $(input).attr('data-format') == "date-only"));
             });
         }
     }

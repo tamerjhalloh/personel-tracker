@@ -14,5 +14,14 @@ namespace Personnel.Tracker.Portal.Services
         [AllowAnyStatusCode]
         [Post("personnel-checks/add")]
         Task<OperationResult<PersonnelCheck>> SetPersonnelCheck([Body] Query<PersonnelCheck> query);
+
+
+        [AllowAnyStatusCode]
+        [Post("personnel-checks/my-attendances")]
+        Task<PaggedOperationResult<DayAttendance>> GetMyPersonnelDayAttencance([Body] Query<PersonnelCheck> query);
+
+        [AllowAnyStatusCode]
+        [Post("personnel-checks/attendances")]
+        Task<PaggedOperationResult<DayAttendance>> GetPersonnelDayAttencance([Body] Query<PersonnelCheck> query);
     }
 }

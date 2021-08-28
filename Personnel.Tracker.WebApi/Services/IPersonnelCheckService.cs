@@ -8,5 +8,8 @@ namespace Personnel.Tracker.WebApi.Services
     {
         Task<OperationResult<PersonnelCheck>> GetLastPersonnelCheck(Query<Model.Personnel.Personnel> query);
         Task<OperationResult<PersonnelCheck>> AddAsync(Query<PersonnelCheck> query);
+
+        Task<PaggedOperationResult<DayAttendance>> GetPersonnelDayAttencance(Query<PersonnelCheck> query);
+
     }
 }

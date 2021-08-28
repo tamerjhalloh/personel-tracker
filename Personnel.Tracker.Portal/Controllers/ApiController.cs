@@ -128,7 +128,54 @@ namespace Personnel.Tracker.Portal.Controllers
         }
 
 
+        [HttpPost("api/my-attendances")]
+        public async Task<IActionResult> MyAttendances(PersonnelCheck check)
+        {
+            var result = new OperationResult<object>();
 
-        
+            try
+            {
+                var getResult = await _personnelCheckService.GetMyPersonnelDayAttencance(new Query<PersonnelCheck>(check));
+                if(getResult.Result)
+                {
+                    result.Response = getResult.Response;
+                    result.Result = true;
+                    return Ok(result);
+                } 
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while getting my attendcies");
+            }
+
+            return Ok(result);
+
+        }
+
+        [HttpPost("api/attendances")]
+        public async Task<IActionResult> Attendances(PersonnelCheck check)
+        {
+            var result = new OperationResult<object>();
+
+            try
+            {
+                var getResult = await _personnelCheckService.GetPersonnelDayAttencance(new Query<PersonnelCheck>(check));
+                if (getResult.Result)
+                {
+                    result.Response = getResult.Response;
+                    result.Result = true;
+                    return Ok(result);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while getting attendcies");
+            }
+
+            return Ok(result);
+
+        }
+
+
     }
 }

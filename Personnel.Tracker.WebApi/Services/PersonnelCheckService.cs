@@ -130,5 +130,34 @@ namespace Personnel.Tracker.WebApi.Services
 
             return result;
         }
+
+        public async Task<PaggedOperationResult<DayAttendance>> GetPersonnelDayAttencance(Query<PersonnelCheck> query)
+        {
+            var result = new PaggedOperationResult<DayAttendance>();
+            try
+            {
+                // Validation
+                if (query.Parameter == null)
+                {
+                    result.PrepareMissingParameterResult("PersonnelCheck");
+                    return result;
+                }
+
+                if (query.Parameter.PersonnelId == Guid.Empty)
+                {
+                    result.PrepareMissingParameterResult("PersonnelId");
+                    return result;
+                }
+
+                result = await _personnelCheckRepository.GetPersonnelDayAttencance(query);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception while getting last personnel check");
+                result.PrepareExceptionResult(ex);
+            }
+
+            return result;
+        }
     }
 }

@@ -24,16 +24,21 @@
                         <i class="lock icon"></i>
                         <input type="password" name="password" id="password" placeholder="Password">
                     </div>
-                </div>  
+                </div>
                 <div class="ui fluid large primary submit button" id="do-login">  <i class="door icon"></i> Login</div>
             </div>
 
             <div class="ui error message"></div>
 
-        </div> 
-       
+        </div>
+
     </div>
 </div>
+
+@section Styles { 
+    <link href="~/css/login.css" rel="stylesheet" />
+}
+
 @section Scripts {
     <script src="~/js/member/login.js" asp-append-version="true"></script>
 }

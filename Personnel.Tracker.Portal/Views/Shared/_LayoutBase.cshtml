@@ -13,6 +13,9 @@
     <link href="~/lib/semantic-ui/dist/semantic.min.css" rel="stylesheet" />
     <link href="~/lib/waitMe/waitMe.min.css" rel="stylesheet" />
 
+    @RenderSection("Styles", required: false)
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
     <script src="~/lib/waitMe/waitMe.min.js"></script>
@@ -23,23 +26,6 @@
     @RenderSection("Scripts", required: false)
 
 
-    <style type="text/css">
-        body {
-            background-color: #DADADA;
-        }
-
-            body > .grid {
-                height: 100%;
-            }
-
-        .image {
-            margin-top: -100px;
-        }
-
-        .column {
-            max-width: 450px;
-        }
-    </style>
 </head>
 <body>
 

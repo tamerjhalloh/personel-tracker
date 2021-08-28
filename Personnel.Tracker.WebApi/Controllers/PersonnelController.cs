@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Personnel.Tracker.Common.Authentication;
 
 namespace Personnel.Tracker.WebApi.Controllers
 {
     [ApiController]
     [Route("personnels")]
+    [JwtAuth]
     public class PersonnelController : BaseController
     {         
         private readonly ILogger<PersonnelController> _logger; 

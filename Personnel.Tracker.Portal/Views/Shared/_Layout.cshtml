@@ -11,7 +11,8 @@
 
     <link href="~/lib/semantic-ui/dist/semantic.min.css" rel="stylesheet" />
     <link href="~/lib/waitMe/waitMe.min.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true"/>
+
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
 
     @RenderSection("Styles", required: false)
 
@@ -19,8 +20,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
     <script src="~/lib/waitMe/waitMe.min.js"></script>
-    <script src="~/lib/jsrender/jsrender.min.js"></script>
-
+    <script src="~/lib/jsrender/jsrender.min.js"></script>  
     <script src="~/js/general.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
@@ -40,19 +40,15 @@
                 Attendance <i class="dropdown icon"></i>
                 <div class="menu">
                     <a class="item" href="/home/attendance">Attendances</a>
-                    @*<a class="item" href="#">Link Item</a>
-                    <div class="divider"></div>
-                    <div class="header">Header Item</div>
-                    <div class="item">
-                        <i class="dropdown icon"></i>
-                        Sub Menu
-                        <div class="menu">
-                            <a class="item" href="#">Link Item</a>
-                            <a class="item" href="#">Link Item</a>
-                        </div>
-                    </div>
-                    <a class="item" href="#">Link Item</a>*@
+
                 </div>
+            </div> 
+            <div class="ui simple dropdown item">
+                Admin <i class="dropdown icon"></i>
+                      <div class="menu">
+                          <a class="item" href="/admin/personnel">Personnel</a>
+                          <a class="item" href="/admin/attendance">Attendances</a>
+                      </div>
             </div>
         </div>
     </div>

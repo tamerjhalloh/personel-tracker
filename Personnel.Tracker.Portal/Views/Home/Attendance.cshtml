@@ -2,16 +2,29 @@
     ViewBag.PageTitle = "Home page";
 }
 
-<div class="ui vertical masthead center aligned segment">
-    <div class="ui text container" id="attendances">
-        <div class="ui inverted dimmer">
-            <div class="ui text loader">Loading</div>
-        </div>
-        <p></p>
-        <p></p>
-    </div>
+    <h1 class="ui header">My Attendances</h1>
 
-</div>
+    <div class="ui vertical masthead center aligned segment">
+        <h3>Filters</h3>
+        <div class="ui calendar" id="date-picker">
+            <div class="ui input left icon">
+                <i class="calendar icon"></i>
+                <input type="text" placeholder="Date">
+            </div>
+        </div>
+        <br />
+        <button class="ui button" id="search-attendances">  Search </button>
+        <br />
+        <br />
+        <div class="ui text container" id="attendances">
+            <div class="ui inverted dimmer">
+                <div class="ui text loader">Loading</div>
+            </div>
+            <p></p>
+            <p></p>
+        </div>
+
+    </div>
 
 @section Scripts {
     <script src="~/js/attendance/attendance.js" asp-append-version="true"></script>

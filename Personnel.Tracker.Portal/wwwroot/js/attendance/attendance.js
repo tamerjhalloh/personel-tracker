@@ -9,44 +9,45 @@ var MyAttendance = function () {
 
         var template = "#tmp-personnel-records"; 
 
-        $('#attendances').replaceWith(General.renderTemplate(template, data));
+        $('#attendances').html(General.renderTemplate(template, data));
 
         General.initInputs();
         MyAttendance.init(); 
     }
 
+    var searchAttendances = filters => {
+
+        var panel = $('body'); 
+        General.ajax({
+            url: "/api/my-attendances",
+            data: filters,
+            panel: panel,
+            success: function (data) {
+                console.log(data.Response);
+                setPersonnelAttendanceView(data);
+            }
+        });
+    }
+
     return {       
-        initOnce: function () { 
-
-            var panel = $('body')
-
-            General.ajax({
-                url: "/api/my-attendances", 
-                panel: panel, 
-                success: function (data) {
-                    console.log(data.Response);
-                    setPersonnelAttendanceView(data); 
-                } 
+        initOnce: function () {  
+           
+            $('#date-picker').calendar({
+                type: 'date' 
             });
+
+            searchAttendances({});
+          
         },
         init: function () { 
 
-            $(".check-button").off("click").click(function () {
+            $("#search-attendances").off("click").click(function () {
 
-                var cntrl = $(this);
-                var panel = $('#check-status-holder'); 
-                var type = $(this).attr('data-status'); 
+                var filters = {
+                    CreationTime: $('#date-picker').find('input').val()
+                }
 
-                General.ajax({
-                    url: "/api/set-personnel-check",
-                    data: { PersonnelCheckType: type},
-                    panel: panel,
-                    sender: cntrl,
-                    success: function (data) { 
-                        setPersonnelCheckView(data.Response); 
-                    } 
-                });
-
+                searchAttendances(filters);
             });
         }
     }

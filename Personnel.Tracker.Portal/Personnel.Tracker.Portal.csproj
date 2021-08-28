@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\lib\bootstrap-notify\" />
     <Folder Include="wwwroot\lib\semantic-ui\dist\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>

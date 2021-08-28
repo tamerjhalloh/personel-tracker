@@ -175,33 +175,18 @@ var General = function () {
 
             if (type == undefined || type == "") {
                 type = state.Primary;
-            }
+            } 
 
-            if (timer == undefined || timer == "0" || timer < 1) {
-                timer = 3;
-            }
+            if (type == 'danger')
+                type = 'error';
 
-            var from = "top";
-            var align = "right";
-
-            //if (position == undefined || position == "") {
-            //    from = position;
-            //}
-
-            //$.notify({
-            //    icon: "add_alert",
-            //    message: message,
-            //    title: title
-            //}, {
-            //    type: type,
-            //    timer: timer * 1000,
-            //    placement: {
-            //        from: from,
-            //        align: align
-            //    }
-            //});
-
-            alert(message);
+            $('body')
+                .toast({
+                   // class: type,
+                    message: message,
+                    position: 'top center',
+                    class: 'center aligned ' + type
+                });
         },
         block: function (item, options) {
             $(item).waitMe({});

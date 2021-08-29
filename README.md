@@ -3,7 +3,7 @@
 This is a small project to track personnel check in / check out.
 
 Key Features
-* User can check in / check out
+* Personnel can check in / check out
 * Admin can track personnel actions.
 
 

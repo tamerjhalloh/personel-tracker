@@ -54,5 +54,6 @@ var MyAttendance = function () {
 }();
 
 $(document).ready(function () {
-    MyAttendance.initOnce();  
+    MyAttendance.initOnce();
+    MyAttendance.init();
 });

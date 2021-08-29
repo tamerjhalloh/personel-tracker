@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Personnel.Tracker.Common;
 using Personnel.Tracker.Common.RestEase;
+using Personnel.Tracker.Portal.Middlewares;
 using Personnel.Tracker.Portal.Services;
 
 namespace Personnel.Tracker.Portal
@@ -32,13 +34,13 @@ namespace Personnel.Tracker.Portal
             services.AddCustomMvc();
             services.AddDistributedMemoryCache();
 
-            services.AddAuthentication("CookieAuth")
-                 .AddCookie("CookieAuth", config =>
-                 {
-                     config.Cookie.Name = "_Personnel_";
-                     config.LoginPath = "/member/login";
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(config =>
+                {
+                    config.Cookie.Name = "_Personnel_";
+                    config.LoginPath = "/member/login";
+                });
 
-                 });
 
             services.RegisterServiceForwarder<IIdentityService>("rest-api");
             services.RegisterServiceForwarder<IPersonnelService>("rest-api");
@@ -64,7 +66,11 @@ namespace Personnel.Tracker.Portal
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+
+            app.UseUserHandler();
 
             app.UseEndpoints(endpoints =>
             {

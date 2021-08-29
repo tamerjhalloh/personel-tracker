@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Personnel.Tracker.Model.Action;
 using Personnel.Tracker.Model.Auth;
+using Personnel.Tracker.Model.Criteria;
 using Personnel.Tracker.Model.Personnel;
 using Personnel.Tracker.Portal.Helpers;
 using Personnel.Tracker.Portal.Models;
@@ -10,20 +11,24 @@ using Personnel.Tracker.Portal.Services;
 
 namespace Personnel.Tracker.Portal.Controllers
 {
-    public class ApiController : Controller
+    public class ApiController : AuthController
     {
         private readonly ILogger<ApiController> _logger;
 
         private readonly IIdentityService _identityService;
         private readonly IPersonnelCheckService _personnelCheckService;
+        private readonly IPersonnelService _personnelService;
 
 
-        public ApiController(ILogger<ApiController> logger, IIdentityService identityService, IPersonnelCheckService personnelCheckService)
+
+        public ApiController(ILogger<ApiController> logger, IIdentityService identityService, IPersonnelCheckService personnelCheckService, IPersonnelService personnelService)
         {
             _logger = logger;
             _identityService = identityService;
             _personnelCheckService = personnelCheckService;
+            _personnelService = personnelService;
         }
+
 
 
         [HttpPost("api/sign-in")]
@@ -48,7 +53,8 @@ namespace Personnel.Tracker.Portal.Controllers
                             Name = personnel.Name,
                             Surname = personnel.Surname,
                             RefreshToken = token.RefreshToken,
-                            Token = token.AccessToken
+                            Token = token.AccessToken,
+                            Role = personnel.PersonnelRole.ToString()
                         };
 
                         await UserIdentityHelper.SetIdentity(HttpContext, identiyUser);
@@ -80,7 +86,6 @@ namespace Personnel.Tracker.Portal.Controllers
         }
 
 
-
         [HttpPost("api/last")]
         public async Task<IActionResult> Last()
         {
@@ -91,7 +96,7 @@ namespace Personnel.Tracker.Portal.Controllers
                 var lastResult = await _personnelCheckService.GetLastCheck();
 
                 result.Response = lastResult.Response;
-                result.Result = true; 
+                result.Result = true;
                 return Ok(result);
 
             }
@@ -136,12 +141,12 @@ namespace Personnel.Tracker.Portal.Controllers
             try
             {
                 var getResult = await _personnelCheckService.GetMyPersonnelDayAttencance(new Query<PersonnelCheck>(check));
-                if(getResult.Result)
+                if (getResult.Result)
                 {
                     result.Response = getResult.Response;
                     result.Result = true;
                     return Ok(result);
-                } 
+                }
             }
             catch (System.Exception ex)
             {
@@ -161,6 +166,30 @@ namespace Personnel.Tracker.Portal.Controllers
             {
                 var getResult = await _personnelCheckService.GetPersonnelDayAttencance(new Query<PersonnelCheck>(check));
                 if (getResult.Result)
+                {
+                    result.Response = getResult.Response;
+                    result.Result = true;
+                    return Ok(result);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while getting attendcies");
+            }
+
+            return Ok(result);
+
+        }
+
+        [HttpGet("api/personnel/search")]
+        public async Task<IActionResult> SearchPersonnel(string query)
+        {
+            var result = new OperationResult<object>();
+
+            try
+            {
+                var getResult = await _personnelService.Search(new Query<SearchPersonnelCriteria>(new SearchPersonnelCriteria { Search = query }));
+                if (getResult.Result) 
                 {
                     result.Response = getResult.Response;
                     result.Result = true;

@@ -143,11 +143,11 @@ namespace Personnel.Tracker.WebApi.Services
                     return result;
                 }
 
-                if (query.Parameter.PersonnelId == Guid.Empty)
-                {
-                    result.PrepareMissingParameterResult("PersonnelId");
-                    return result;
-                }
+                //if (query.Parameter.PersonnelId == Guid.Empty)
+                //{
+                //    result.PrepareMissingParameterResult("PersonnelId");
+                //    return result;
+                //}
 
                 result = await _personnelCheckRepository.GetPersonnelDayAttencance(query);
             }

@@ -20,7 +20,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/semantic-ui/dist/semantic.min.js"></script>
     <script src="~/lib/waitMe/waitMe.min.js"></script>
-    <script src="~/lib/jsrender/jsrender.min.js"></script>  
+    <script src="~/lib/jsrender/jsrender.min.js"></script>
     <script src="~/js/general.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
@@ -42,26 +42,30 @@
                     <a class="item" href="/home/attendance">Attendances</a>
 
                 </div>
-            </div> 
-            <div class="ui simple dropdown item">
-                Admin <i class="dropdown icon"></i>
-                      <div class="menu">
-                          <a class="item" href="/admin/personnel">Personnel</a>
-                          <a class="item" href="/admin/attendance">Attendances</a>
-                      </div>
             </div>
+            @if (CurrentPersonnel.Role == Personnel.Tracker.Model.Base.PersonnelRole.Admin.ToString())
+            {
+                <div class="ui simple dropdown item">
+                    Admin <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item" href="/admin/personnel">Personnel</a>
+                        <a class="item" href="/admin/attendance">Attendances</a>
+                    </div>
+                </div>
+            }
+
         </div>
     </div>
 
-    <div class="ui main text container min-vh-75">       
-        @RenderBody()         
+    <div class="ui main text container min-vh-75">
+        @RenderBody()
     </div>
 
     <div class="ui inverted vertical footer segment fixed">
         <div class="ui center aligned container">
             <img src="/images/logo.png" class="ui centered mini image">
             <div class="ui horizontal inverted small divided link list">
-                <a class="item" href="#">Tamer Alloh</a> 
+                <a class="item" href="#">Tamer Alloh</a>
             </div>
         </div>
     </div>

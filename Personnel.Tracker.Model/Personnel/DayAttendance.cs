@@ -13,7 +13,7 @@ namespace Personnel.Tracker.Model.Personnel
         public DateTime LastCheck { get; set; } 
         public PersonnelCheckType LastCheckType { get; set; }
         public Guid PersonnelId { get; set; }
-        public Guid Personnel  { get; set; }
+        public Personnel Personnel  { get; set; }
 
     }
 }

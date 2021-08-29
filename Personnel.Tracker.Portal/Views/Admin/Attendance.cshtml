@@ -1,0 +1,97 @@
+﻿@{
+    SetTitle("Attendances");
+}
+
+<h1 class="ui header">Admin / Attendances</h1>
+
+<div class="ui vertical masthead center aligned segment">
+    <h3>Filters</h3>
+
+    <div class="ui three column grid">
+        <div class="six wide column">
+            <div class="field">
+                <label>Date</label>
+                <div class="fields">
+                    <div class="ui calendar" id="date-picker">
+                        <div class="ui input left icon">
+                            <i class="calendar icon"></i>
+                            <input type="text" placeholder="Date">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ten wide column">
+            <div class="field">
+                <label>Personnel</label>
+                <div class="fields">
+                    <div class="ui search">
+                        <div class="ui left fluid icon input">
+                            <input class="prompt" type="text" placeholder="Search Personnel.. (Min 2 characters)" id="personnel-autocomplete">
+                            <i class="user icon"></i>
+                        </div>
+                    </div>
+                    <input type="hidden" value="" id="personnel" /> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <br />
+    <button class="ui button" id="search-attendances">  Search </button>
+    <br />
+    <br />
+    <div class="ui text container" id="attendances">
+        <div class="ui inverted dimmer">
+            <div class="ui text loader">Loading</div>
+        </div>
+        <p></p>
+        <p></p>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/admin/attendance.js" asp-append-version="true"></script>
+
+    <script id="tmp-personnel-records" type="text/x-jsrender">
+        <table class="ui celled striped table">
+            <thead>
+                <tr>
+                    <th colspan="4">
+                        Attendances
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Personnel
+                    </th>
+                    <th>
+                        Check In
+                    </th>
+                    <th>
+                        Check Out
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{for Response}}
+                <tr>
+                    <td class="collapsing">
+                        <i class="calendar icon"></i> <span class="date-text" data-value="{{:Date}}" data-format="date-only"> </span>
+                    </td>
+                    <td>{{:Personnel.Name}} {{:Personnel.Surname}}</td>
+                    <td><span class="date-text" data-value="{{:FirstCheckIn}}"> </span></td>
+                    <td><span class="date-text" data-value="{{:LastCheckOut}}"> </span></td>
+                </tr>
+                {{/for}}
+            </tbody>
+        </table>
+    </script>
+
+
+}

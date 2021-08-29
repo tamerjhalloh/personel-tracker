@@ -14,9 +14,11 @@ namespace Personnel.Tracker.Portal.Helpers
         {
             List<Claim> userClaims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, identity.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, identity.Id.ToString()),
                 new Claim(ClaimTypes.Email, identity.Email),
-                new Claim(ClaimTypes.GivenName, $"{identity.Name} {identity.Surname}")
+                new Claim(ClaimTypes.Name,identity.Name),
+                new Claim(ClaimTypes.GivenName,identity.Surname),
+                new Claim(ClaimTypes.Role, identity.Role)
             };
             var userIdentity = new ClaimsIdentity(userClaims, "Personnel");
             ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
@@ -25,17 +27,29 @@ namespace Personnel.Tracker.Portal.Helpers
             context.Response.Cookies.Append("_accesstoken", identity.Token);
         }
 
-        public static Model.Personnel.Personnel GetUserFromIdentity(HttpContext context)
+        public static UserIdentity GetUserFromIdentity(HttpContext context)
         {
             try
             {
-                if (context.Items["user"] != null)
-                    return context.Items["user"] as Model.Personnel.Personnel;
+                var currentUser = context.User;
+
+                UserIdentity user = new UserIdentity
+                {
+
+                    Id = Guid.Parse(currentUser.FindFirstValue(ClaimTypes.NameIdentifier)),
+                    Name = currentUser.FindFirstValue(ClaimTypes.Name),
+                    Surname = currentUser.FindFirstValue(ClaimTypes.GivenName),
+                    Email = currentUser.FindFirstValue(ClaimTypes.Email),
+                    Role = currentUser.FindFirstValue(ClaimTypes.Role)
+                };
+
+                return user;
             }
             catch (Exception ex)
             {
 
             }
+
             return null;
         }
     }

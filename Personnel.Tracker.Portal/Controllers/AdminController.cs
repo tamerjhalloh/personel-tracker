@@ -5,16 +5,16 @@ using Personnel.Tracker.Portal.Models;
 
 namespace Personnel.Tracker.Portal.Controllers
 {
-    public class HomeController : AuthController
+    public class AdminController : AuthController
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<AdminController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public AdminController(ILogger<AdminController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Personnel()
         {
             return View();
         }

@@ -5,7 +5,7 @@ using Personnel.Tracker.Portal.Models;
 
 namespace Personnel.Tracker.Portal.Controllers
 {
-    public class MemberController : Controller
+    public class MemberController : BaseController
     {
         private readonly ILogger<MemberController> _logger;
 

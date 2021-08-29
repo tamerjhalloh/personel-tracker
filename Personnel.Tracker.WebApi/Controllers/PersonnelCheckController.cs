@@ -6,6 +6,8 @@ using Personnel.Tracker.Model.Action;
 using Personnel.Tracker.Model.Personnel;
 using Personnel.Tracker.WebApi.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Personnel.Tracker.WebApi.Controllers
@@ -17,10 +19,13 @@ namespace Personnel.Tracker.WebApi.Controllers
     {
         private readonly ILogger<PersonnelCheckController> _logger;
         private readonly IPersonnelCheckService _personnelCheckService;
-        public PersonnelCheckController(ILogger<PersonnelCheckController> logger, IPersonnelCheckService personnelCheckService)
+        private readonly IPersonnelService _personnelService;
+
+        public PersonnelCheckController(ILogger<PersonnelCheckController> logger, IPersonnelCheckService personnelCheckService, IPersonnelService personnelService)
         {
             _logger = logger;
             _personnelCheckService = personnelCheckService;
+            _personnelService = personnelService;
         }
 
         [HttpGet]
@@ -68,7 +73,34 @@ namespace Personnel.Tracker.WebApi.Controllers
         [HttpPost("attendances")]
         public async Task<IActionResult> GetAttendancesAsync(Query<PersonnelCheck> query)
         {
-            return Ok(await _personnelCheckService.AddAsync(query));
+
+            var result = await _personnelCheckService.GetPersonnelDayAttencance(query);
+
+            if (result.Result)
+            {
+                if (result.Response != null && result.Response.Any())
+                {
+                    var presonnelResult = await _personnelService.SearchPersonnel(new Query<Model.Criteria.SearchPersonnelCriteria>(new Model.Criteria.SearchPersonnelCriteria
+                    {
+                        PersonnelIds = result.Response.Select(x => x.PersonnelId).ToList()
+                    })
+                    {
+                        PageSize = int.MaxValue
+                    });
+
+                    if(presonnelResult.Result)
+                    {
+                        var personnels = presonnelResult.Response ?? new List<Model.Personnel.Personnel>();
+
+                        foreach (var item in result.Response)
+                        {
+                            item.Personnel = personnels.FirstOrDefault(x => x.PersonnelId == item.PersonnelId);
+                        }
+                    }
+                }
+            }
+
+            return Ok(result);
         }
 
         //[HttpPut]

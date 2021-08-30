@@ -54,8 +54,16 @@
                 </div>
             }
 
-            <a href="/member/signout" class="item">Sign out</a>
+            @*<a href="/member/signout" class="item">Sign out</a>*@
 
+            <div class="right menu"> 
+                <div class="ui dropdown item" tabindex="0">
+                    @CurrentPersonnel.Name @CurrentPersonnel.Surname<i class="dropdown icon"></i>
+                    <div class="menu transition hidden" tabindex="-1">
+                        <a class="item" href="/member/signout">Log out</a> 
+                    </div>
+                </div> 
+            </div>
         </div>
     </div>
 

@@ -255,6 +255,11 @@ var General = function () {
             return date;
         },
         initInputs: function () {
+
+            $('.ui.menu .ui.dropdown').dropdown({
+                on: 'hover'
+            });
+
             $.each($(".date-text"), function (i, input) {  
                 $(input).text(General.formatDateTime($(input).attr('data-value'), $(input).attr('data-format') == "date-only"));
             });

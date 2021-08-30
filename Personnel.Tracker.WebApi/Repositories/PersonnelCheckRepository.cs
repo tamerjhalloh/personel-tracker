@@ -32,7 +32,7 @@ namespace Personnel.Tracker.WebApi.Repositories
 
                 var items = _context.PersonnelChecks.Select(a => a);
 
-                if(query.Parameter.PersonnelId != Guid.Empty)
+                if (query.Parameter.PersonnelId != Guid.Empty)
                 {
                     items = items.Where(x => x.PersonnelId == query.Parameter.PersonnelId);
                 }
@@ -50,13 +50,13 @@ namespace Personnel.Tracker.WebApi.Repositories
                                         {
                                             Date = group.Key.Date,
                                             PersonnelId = group.Key.PersonnelId,
-                                            FirstCheckIn = group.Where(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.In).Min(x => x.CreationTime.Value),
-                                            FirstCheckOut = group.Where(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.Out).Min(x => x.CreationTime.Value),
-                                            LastCheckIn = group.Where(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.In).Max(x => x.CreationTime.Value),
-                                            LastCheckOut = group.Where(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.Out).Max(x => x.CreationTime.Value),
-                                            LastCheck = group.Where(x => x.CreationTime == group.Max(y => y.CreationTime)).FirstOrDefault().CreationTime.Value,
-                                            LastCheckType = group.Where(x => x.CreationTime == group.Max(y => y.CreationTime)).FirstOrDefault().PersonnelCheckType
-                                        }).OrderByDescending(x=> x.Date).ToList();
+                                            FirstCheckIn = !group.Any(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.In) ? DateTime.MinValue : group.Where(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.In).Min(x => x.CreationTime.Value),
+                                            FirstCheckOut = !group.Any(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.Out) ? DateTime.MinValue : group.Where(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.Out).Min(x => x.CreationTime.Value),
+                                            LastCheckIn = !group.Any(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.In) ? DateTime.MinValue : group.Where(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.In).Max(x => x.CreationTime.Value),
+                                            LastCheckOut = !group.Any(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.Out) ? DateTime.MinValue : group.Where(x => x.PersonnelCheckType == Model.Base.PersonnelCheckType.Out).Max(x => x.CreationTime.Value),
+                                            LastCheck = !group.Any() ? DateTime.MinValue : group.Where(x => x.CreationTime == group.Max(y => y.CreationTime)).FirstOrDefault().CreationTime.Value,
+                                            LastCheckType = !group.Any() ? Model.Base.PersonnelCheckType.In : group.Where(x => x.CreationTime == group.Max(y => y.CreationTime)).FirstOrDefault().PersonnelCheckType
+                                        }).OrderByDescending(x => x.Date).ToList();
 
                 //  result.Message = attendances.ToSql();
 
@@ -65,7 +65,7 @@ namespace Personnel.Tracker.WebApi.Repositories
 
                 result.Response = attendances;
 
-                result.Result = true; 
+                result.Result = true;
             }
             catch (Exception ex)
             {

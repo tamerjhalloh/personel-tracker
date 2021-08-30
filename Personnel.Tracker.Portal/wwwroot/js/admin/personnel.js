@@ -103,6 +103,25 @@ var Personnel = function () {
                     }
                 });   
             });
+
+            $(".change-password").off("click").click(function () {
+
+                var cntrl = $(this);
+
+                var personnelId = $(cntrl).attr('data-id');
+
+                General.ajax({
+                    url: "/api/personnels/get?id=" + personnelId,
+                    type: General.requestType().Get,
+                    panel: $('body'),
+                    sender: cntrl,
+                    success: function (data) {
+                        var personnelPasswordForm = General.renderTemplate('#tmp-personnel-password-form', data.Response);
+                        $(personnelPasswordForm).modal('show');
+                        Personnel.initPasswordFormEvents();
+                    }
+                });
+            });
         },
         initFormEvents: function () {
 
@@ -139,6 +158,48 @@ var Personnel = function () {
                     }); 
                 }
             }); 
+
+        },
+        initPasswordFormEvents: function () {
+
+            var form = $('.ui.form')
+                .form({
+                    fields: {
+                        Password: 'empty',
+                        RetypePassword: 'empty' 
+                    }
+                });
+
+
+
+            $(form).on('submit', function (e) {
+                e.preventDefault();
+                var model = form.form('get values');
+                model.PasswordHash = model.Password;
+                if (model.Password != model.RetypePassword) {
+                    General.notifyFailure('Both passwords have to be identical!!');
+                    return false;
+                }
+                console.log(model);
+                //console.log(form.form('is valid')); 
+                if (form.form('is valid')) {
+
+                    
+
+                    General.ajax({
+                        url: "/api/personnels/password",
+                        data: model,
+                        panel: form,
+                        sender: $(form).find('button'),
+                        success: function (data) {
+                            $('.ui.modal').modal('hide');
+                            $('.ui.modal').remove();
+                            pageIndex = 0;
+                            searchPersonnel();
+                        }
+                    });
+                }
+            });
 
         }
     }

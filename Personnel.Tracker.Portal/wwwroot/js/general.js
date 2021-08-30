@@ -254,11 +254,16 @@ var General = function () {
             var date = dateOnly && dateOnly == true ? day + "/" + month + "/" + year :  day + "/" + month + "/" + year + " " + h + ":" + m;
             return date;
         },
-        initInputs: function () {
+        initInputs: function () {   
 
             $('.ui.menu .ui.dropdown').dropdown({
                 on: 'hover'
             });
+
+            $('[data-content!=""]')
+                .popup({
+                    on: 'hover'
+                });
 
             $.each($(".date-text"), function (i, input) {  
                 $(input).text(General.formatDateTime($(input).attr('data-value'), $(input).attr('data-format') == "date-only"));

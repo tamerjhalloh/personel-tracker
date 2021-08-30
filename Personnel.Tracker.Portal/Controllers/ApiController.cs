@@ -244,6 +244,22 @@ namespace Personnel.Tracker.Portal.Controllers
             return Ok(result);
         }
 
+        [HttpPost("api/personnels/password")]
+        public async Task<IActionResult> ChangePassword(Model.Personnel.Personnel model)
+        {
+            var result = new OperationResult<Model.Personnel.Personnel>();
+            try
+            {
+                result =   await _personnelService.ChangePassword(new Query<Model.Personnel.Personnel>(model));
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while setting personnel");
+            }
+
+            return Ok(result);
+        }
+
         [HttpGet("api/personnels/get")]
         public async Task<IActionResult> GetPersonnel()
         {

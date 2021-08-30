@@ -87,6 +87,55 @@ namespace Personnel.Tracker.WebApi.Services
             return result;
         }
 
+        public async Task<OperationResult<Model.Personnel.Personnel>> ChangePassword(Query<Model.Personnel.Personnel> query)
+        {
+            var result = new OperationResult<Model.Personnel.Personnel>();
+            try
+            {
+
+                if (query.Parameter == null)
+                {
+                    result.PrepareMissingParameterResult("Personnel");
+                    return result;
+                }
+
+                if (query.Parameter.PersonnelId == Guid.Empty)
+                {
+                    result.PrepareMissingParameterResult("PersonnelId");
+                    return result;
+                } 
+
+                if (query.Parameter.PasswordHash.IsEmpty())
+                {
+                    result.PrepareMissingParameterResult("Password");
+                    return result;
+                } 
+
+
+                var getDbPersonnelResult = await _personnelRepository.GetAsync(x => x.PersonnelId == query.Parameter.PersonnelId);
+
+                if (getDbPersonnelResult.Result)
+                {
+                    var hasher = new PasswordHasher<Model.Personnel.Personnel>();
+
+                    query.Parameter.PasswordHash = hasher.HashPassword(query.Parameter, query.Parameter.PasswordHash);
+
+                    result = await _personnelRepository.UpdateAsync(getDbPersonnelResult.Response); 
+                }
+                else
+                {
+                    result.PrepareNotFoundResult();
+                    result.ErrorMessage = "Personnel was not found!!";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UPDATE Personnel {@Query}", query);
+                result.PrepareExceptionResult(ex);
+            }
+            return result;
+        }
+
         public async Task<OperationResult<Model.Personnel.Personnel>> Get(Query<Model.Personnel.Personnel> query)
         {
             var result = new OperationResult<Model.Personnel.Personnel>();

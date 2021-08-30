@@ -27,5 +27,9 @@ namespace Personnel.Tracker.Portal.Services
         [Get("personnels")]
         Task<OperationResult<Model.Personnel.Personnel>> Get([Query] Guid id);
 
+
+        [AllowAnyStatusCode]
+        [Post("personnels/password")]
+        Task<OperationResult<Model.Personnel.Personnel>> ChangePassword([Body] Query<Model.Personnel.Personnel> query);
     }
 }

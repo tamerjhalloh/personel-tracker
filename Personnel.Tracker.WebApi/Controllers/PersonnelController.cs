@@ -53,6 +53,13 @@ namespace Personnel.Tracker.WebApi.Controllers
             return Ok(await _personnelService.SearchPersonnel(query));
         }
 
+        [HttpPost("password")]
+        public async Task<IActionResult> ChangePassword(Query<Model.Personnel.Personnel> query)
+        {
+            return Ok(await _personnelService.ChangePassword(query));
+        }
+
+
 
     }
 }

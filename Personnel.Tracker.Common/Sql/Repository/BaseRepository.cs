@@ -143,6 +143,8 @@ namespace Personnel.Tracker.Common.Sql.Repository
 
                 result.TotalCount = await queryable.CountAsync();
                 result.Response = await queryable.OrderBy(query).Page(query.PageSize,query.PageIndex).AsNoTracking().ToListAsync();
+                result.PageIndex = query.PageIndex;
+                result.PageSize = query.PageSize; 
                 result.Result = true;
             }
             catch (Exception ex)

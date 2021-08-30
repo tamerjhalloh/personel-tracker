@@ -30,6 +30,7 @@ var General = function () {
     }
 
     return {
+        requestType: () => { return requestType; },
         ajax: function (options) {
             options = $.extend(true,
                 {

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Personnel.Tracker.Model.Action;
@@ -189,7 +191,7 @@ namespace Personnel.Tracker.Portal.Controllers
             try
             {
                 var getResult = await _personnelService.Search(new Query<SearchPersonnelCriteria>(new SearchPersonnelCriteria { Search = query }));
-                if (getResult.Result) 
+                if (getResult.Result)
                 {
                     result.Response = getResult.Response;
                     result.Result = true;
@@ -198,13 +200,74 @@ namespace Personnel.Tracker.Portal.Controllers
             }
             catch (System.Exception ex)
             {
-                _logger.LogError(ex, "Exception while getting attendcies");
+                _logger.LogError(ex, "Exception while searching  personnels by query");
             }
 
             return Ok(result);
 
         }
 
+
+        [HttpPost("api/personnels")]
+        public async Task<IActionResult> SearchPersonnels(Query<SearchPersonnelCriteria> query)
+        {
+            var result = new PaggedOperationResult<Model.Personnel.Personnel>();
+
+            try
+            {
+                result = await _personnelService.Search(query);
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while searching personnels");
+            }
+
+            return Ok(result);
+        }
+
+
+        [HttpPost("api/personnels/set")]
+        public async Task<IActionResult> SetPersonnel(Model.Personnel.Personnel model)
+        {
+            var result = new OperationResult<Model.Personnel.Personnel>();
+            try
+            {
+                result = model.PersonnelId == Guid.Empty ?
+                            await _personnelService.Add(new Query<Model.Personnel.Personnel>(model)) :
+                            await _personnelService.Update(new Query<Model.Personnel.Personnel>(model));
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while setting personnel");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("api/personnels/get")]
+        public async Task<IActionResult> GetPersonnel()
+        {
+            var result = new OperationResult<Model.Personnel.Personnel>();
+            try
+            {
+                Guid personnelId = Guid.TryParse(Request.Query["id"].FirstOrDefault(), out personnelId) ? personnelId : Guid.Empty;
+                if(personnelId != Guid.Empty)
+                {
+                    result = await _personnelService.Get(personnelId);
+                }
+                else
+                {
+                    result.ErrorMessage = "Personnel Id is empty!!";
+                }
+              
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while getting personnel");
+            }
+
+            return Ok(result);
+        }
 
     }
 }

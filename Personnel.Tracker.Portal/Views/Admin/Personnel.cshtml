@@ -1,0 +1,169 @@
+﻿@{
+    SetTitle("Personnel");
+}
+
+<h1 class="ui header">Admin / Personnel</h1>
+
+<div class="ui vertical masthead center aligned segment">
+    <h3>Filters</h3>
+
+    <div class="ui three column grid">
+        <div class="sixteen wide column">
+            <div class="field">
+                <div class="fields">
+                    <div class="ui input fluid left icon">
+                        <i class="search icon"></i>
+                        <input type="text" placeholder="Search..." id="search">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <button class="ui button" id="search-personnel">  Search </button>
+    <button class="ui button" id="add-personnel">  <i class="plus icon"></i> Add New </button>
+
+    <br />
+    <br />
+    <div class="ui text container" id="personnels">
+        <div class="ui inverted dimmer">
+            <div class="ui text loader">Loading</div>
+        </div>
+        <p></p>
+        <p></p>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/admin/personnel.js" asp-append-version="true"></script>
+
+    <script id="tmp-personnel-records" type="text/x-jsrender">
+        <table class="ui celled striped table">
+            <thead>
+                <tr>
+                    <th colspan="5">
+                        Personnel
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Surname
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Creation Time
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{if Response.length < 1}}
+                <tr>
+                    <td colspan="5" class="center aligned">
+                        No perssonel found
+                    </td>
+                </tr>
+                {{else}}
+                {{for Response}}
+                <tr>
+                    <td class="collapsing">
+                        {{:Name}}
+                    </td>
+                    <td>   {{:Surname}}</td>
+                    <td>   {{:Email}} <br /> <div class="ui red horizontal label">{{:PersonnelRole}}</div> </td>
+                    <td><span class="date-text" data-value="{{:CreationTime}}"> </span></td>
+                    <td>
+                        <div class="ui icon buttons">
+                            <button class="ui button edit-personnel" data-id="{{:PersonnelId}}"><i class="edit icon"></i></button>
+                            <button class="ui button"><i class="lock icon"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                {{/for}}
+                {{/if}}
+            </tbody>
+            {{if Response.length > 0}}
+            <tfoot>
+                <tr>
+                    <th colspan="5">
+                        <div class="ui right floated pagination menu">
+                            <a class="icon page-item-prev {{if PageIndex < 1}} disabled {{/if}} item">
+                                <i class="left chevron icon"></i>
+                            </a>
+                            {{for start=1 end=(~root.PageCount + 1)}}
+                            <a class="item page-item {{if ~root.PageIndex == #index}} disabled {{/if}}" data-index="{{:#index}}">{{:#getIndex()+1}}</a>
+                            {{/for}}
+                            <a class="icon page-item-next {{if  ~root.PageIndex > (~root.PageCount - 2)}} disabled {{/if}} item">
+                                <i class="right chevron icon"></i>
+                            </a>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+            {{/if}}
+        </table>
+    </script>
+
+    <script id="tmp-personnel-form" type="text/x-jsrender">
+        <div class="ui modal">
+            <i class="close icon"></i>
+            <div class="header">
+                Personnel Info  {{if Name != null && Name != ''}}  - {{:Name}} {{:Surname}}  {{/if}}
+            </div>
+            <div class="content">  
+                <form class="ui form segment">
+                    <input type="hidden" name="PersonnelId" value="{{:PersonnelId}}" />
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Name</label>
+                            <input placeholder="Name" name="Name" type="text" value="{{:Name}}" />
+                        </div>
+                        <div class="field">
+                            <label>Surname</label>
+                            <input placeholder="Surname" name="Surname" type="text" value="{{:Surname}}" />
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Email</label>
+                            <input placeholder="Email" name="Email" type="text" value="{{:Email}}" />
+                        </div>
+                        <div class="field">
+                            <label>Role</label>
+                            <select name="PersonnelRole" class="ui dropdown">
+                                <option value="Personnel">Personnel</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    {{if Name == null || Name == ''}}
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Password</label>
+                            <input placeholder="Password" name="Password" type="text" />
+                        </div>
+                    </div>
+                    {{/if}}
+                    <div class="ui primary submit button">Submit</div>
+                    <div class="ui error message"></div>
+                </form>
+
+            </div>
+            <div class="actions">
+                <div class="ui black deny button">
+                    Close
+            </div>
+            </div>
+        </div>
+    </script>
+
+}

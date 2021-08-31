@@ -81,6 +81,30 @@ var Attendance = function () {
 
                 searchAttendances(filters);
             });
+
+            $("#export-attendances-xls").off("click").click(function () {
+
+                var filters = {
+                    CreationTime: $('#date-picker').find('input').val(),
+                    PersonnelId: $('#personnel').val()
+                }
+
+                if (filters.CreationTime == '' && filters.PersonnelId == '') {
+                    General.notifyFailure(`Please choose date or a personnel`);
+                    return false;
+                }
+
+                 
+                var panel = $('body');
+                General.ajax({
+                    url: "/api/attendances/xls",
+                    data: filters,
+                    panel: panel,
+                    success: function (data) {
+                        $('<a href="' + data.Response.FilePath + '" target="_blank"></a>')[0].click();
+                    }
+                });
+            });
         }
     }
 }();

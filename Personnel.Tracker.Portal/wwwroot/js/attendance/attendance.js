@@ -13,6 +13,10 @@ var MyAttendance = function () {
 
         General.initInputs();
         MyAttendance.init(); 
+
+        $('#date-picker').calendar({
+            type: 'date'
+        });
     }
 
     var searchAttendances = filters => {
@@ -30,13 +34,9 @@ var MyAttendance = function () {
     }
 
     return {       
-        initOnce: function () {  
-           
-            $('#date-picker').calendar({
-                type: 'date' 
-            });
+        initOnce: function () {   
 
-            searchAttendances({});
+            searchAttendances({}); 
           
         },
         init: function () { 
@@ -55,5 +55,6 @@ var MyAttendance = function () {
 
 $(document).ready(function () {
     MyAttendance.initOnce();
-    MyAttendance.init();
+    MyAttendance.init(); 
+
 });

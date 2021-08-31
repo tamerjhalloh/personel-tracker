@@ -21,14 +21,16 @@ namespace Personnel.Tracker.Portal.Controllers
         private readonly IPersonnelCheckService _personnelCheckService;
         private readonly IPersonnelService _personnelService;
 
+        private readonly ExcelHelper _excelHelper;
 
-
-        public ApiController(ILogger<ApiController> logger, IIdentityService identityService, IPersonnelCheckService personnelCheckService, IPersonnelService personnelService)
+        public ApiController(ILogger<ApiController> logger, IIdentityService identityService, IPersonnelCheckService personnelCheckService,
+                        IPersonnelService personnelService, ExcelHelper excelHelper)
         {
             _logger = logger;
             _identityService = identityService;
             _personnelCheckService = personnelCheckService;
             _personnelService = personnelService;
+            _excelHelper = excelHelper;
         }
 
 
@@ -250,7 +252,7 @@ namespace Personnel.Tracker.Portal.Controllers
             var result = new OperationResult<Model.Personnel.Personnel>();
             try
             {
-                result =   await _personnelService.ChangePassword(new Query<Model.Personnel.Personnel>(model));
+                result = await _personnelService.ChangePassword(new Query<Model.Personnel.Personnel>(model));
             }
             catch (System.Exception ex)
             {
@@ -267,7 +269,7 @@ namespace Personnel.Tracker.Portal.Controllers
             try
             {
                 Guid personnelId = Guid.TryParse(Request.Query["id"].FirstOrDefault(), out personnelId) ? personnelId : Guid.Empty;
-                if(personnelId != Guid.Empty)
+                if (personnelId != Guid.Empty)
                 {
                     result = await _personnelService.Get(personnelId);
                 }
@@ -275,7 +277,7 @@ namespace Personnel.Tracker.Portal.Controllers
                 {
                     result.ErrorMessage = "Personnel Id is empty!!";
                 }
-              
+
             }
             catch (System.Exception ex)
             {
@@ -285,5 +287,45 @@ namespace Personnel.Tracker.Portal.Controllers
             return Ok(result);
         }
 
+
+        [HttpPost("api/attendances/xls")]
+        public async Task<IActionResult> ExportAttendances(PersonnelCheck check)
+        {
+            var result = new OperationResult<object>();
+
+            try
+            {
+                var getResult = await _personnelCheckService.GetPersonnelDayAttencance(new Query<PersonnelCheck>(check));
+                if (getResult.Result)
+                {
+                    var attendances = getResult.Response;
+
+                    var excelResult = _excelHelper.ExportToExcel(new ExportToExcelModel
+                    {
+                        FileName = $"Attendances-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}",
+                        SheetName = "Attendances",
+                        WebPath = $"Uploads/Attendances/xls/"
+                    }, attendances.Select(x => new
+                    {
+                        Date = x.Date,
+                        Personnel = $"{x.Personnel.Name} {x.Personnel.Surname}",
+                        CheckIn = x.FirstCheckIn,
+                        CheckOut = x.LastCheckOut
+                    }));
+
+                    result.Result = excelResult.Result;
+                    result.Response = excelResult.Response;
+
+                    return Ok(result);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "Exception while exporting attendcies to excel");
+            }
+
+            return Ok(result);
+
+        }
     }
 }

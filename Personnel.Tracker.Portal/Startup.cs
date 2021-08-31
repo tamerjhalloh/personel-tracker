@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Personnel.Tracker.Common;
 using Personnel.Tracker.Common.RestEase;
+using Personnel.Tracker.Portal.Helpers;
 using Personnel.Tracker.Portal.Middlewares;
 using Personnel.Tracker.Portal.Services;
 
@@ -45,6 +46,9 @@ namespace Personnel.Tracker.Portal
             services.RegisterServiceForwarder<IIdentityService>("rest-api");
             services.RegisterServiceForwarder<IPersonnelService>("rest-api");
             services.RegisterServiceForwarder<IPersonnelCheckService>("rest-api");
+
+
+            services.AddTransient<ExcelHelper>();
 
         }
 
